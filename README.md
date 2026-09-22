@@ -6,7 +6,7 @@
 <p align="center">
   <img src="sweettooth.png"
        alt="SweetTooth visualization"
-       width="900">
+       width="450">
 </p>
 
 <p align="center">
