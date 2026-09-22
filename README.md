@@ -1,6 +1,6 @@
 # SweetTooth 
 
-**SweetTooth ** is an interactive PyMOL visualization plugin that transforms raw DSSP secondary-structure assignments into intuitive, food-inspired molecular representations.
+**SweetTooth** is an interactive PyMOL visualization plugin that transforms raw DSSP secondary-structure assignments into intuitive, food-inspired molecular representations.
 
 The original protein remains fully available in PyMOL, so structures can still be rotated, selected, measured, edited, simulated, and saved normally. SweetTooth only adds visualization objects and never generates or exports images automatically.
 
