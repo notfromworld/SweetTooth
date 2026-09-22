@@ -1,14 +1,7 @@
 <div align="center">
 
 # 🍬 SweetTooth
-
-### Food-inspired secondary-structure visualization for PyMOL
-
-**Turn DSSP assignments into an intuitive, publication-friendly molecular cartoon without losing the underlying protein structure.**
-
-# 🍬 SweetTooth
-
-### Food-inspired secondary-structure visualization for PyMOL
+### Secondary structure, with a little more flavor
 
 <p align="center">
   <img src="sweettooth.png"
