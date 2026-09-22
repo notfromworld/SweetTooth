@@ -1,50 +1,87 @@
-# SweetTooth 
+<div align="center">
 
-**SweetTooth** is an interactive PyMOL visualization plugin that transforms raw DSSP secondary-structure assignments into intuitive, food-inspired molecular representations.
+# 🍬 SweetTooth
 
-The original protein remains fully available in PyMOL, so structures can still be rotated, selected, measured, edited, simulated, and saved normally. SweetTooth only adds visualization objects and never generates or exports images automatically.
+### Food-inspired secondary-structure visualization for PyMOL
 
-## Visual Language
+**Turn DSSP assignments into an intuitive, publication-friendly molecular cartoon without losing the underlying protein structure.**
 
-SweetTooth represents secondary-structure states using clean food-inspired materials drawn directly along the protein trace:
+[![Version](https://img.shields.io/badge/version-1.1.1-blue.svg)](#)
+[![Python](https://img.shields.io/badge/Python-3.8%2B-3776AB.svg?logo=python&logoColor=white)](#)
+[![PyMOL](https://img.shields.io/badge/PyMOL-compatible-6A5ACD.svg)](#)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-- **H / G / I — Helices:** smooth red candy rods with a continuous white spiral
-- **E / B — β-structures:** chocolate ribbons with sparse golden wafer layers
-- **C — Coil:** smooth green translucent gummy worm
-- **S — Bend:** smooth cyan translucent jelly-bean-like bend
-- **T — Turn:** smooth blue translucent gummy hook
-- **P — PPII / κ:** dark licorice with restrained charcoal ridges
-
-The visualization is intentionally minimal. There is no legend, generic gloss overlay, or unnecessary decorative geometry.
-
-The only additional geometry is the **continuous white spiral used to make helices visually recognizable as candy canes**.
-
-SweetTooth creates only objects prefixed with `STF_`. Running `sweettooth_reset` removes only these SweetTooth-generated objects and leaves the original molecular structure untouched.
+</div>
 
 ---
 
-## Installation
+## Overview
 
-Install the Python distribution:
+**SweetTooth** is an interactive visualization plugin for **PyMOL** that maps raw **DSSP secondary-structure assignments** onto a clean, food-inspired molecular representation.
+
+The design goal is simple: keep the familiar modern PyMOL cartoon, preserve the scientific geometry, and add a visual language that makes different secondary-structure states easier to distinguish at a glance.
+
+SweetTooth does **not** replace the protein structure. The original protein remains available for normal PyMOL operations such as rotation, selection, measurement, editing, trajectory playback, simulation workflows, and saving.
+
+SweetTooth also does **not** generate images automatically or modify the original structure/DSSP files.
+
+---
+
+## ✨ Visual language
+
+SweetTooth keeps PyMOL's modern cartoon representation and applies a restrained food-inspired style to each DSSP state.
+
+| DSSP state | SweetTooth representation | Visual character |
+|---|---|---|
+| **H / G / I** | 🍭 **Candy cane helix** | Modern red cartoon helix with dense white stripe accents |
+| **E / B** | 🍫 **Chocolate wafer** | Chocolate-brown β-sheet/cartoon ribbon |
+| **C** | 🪱 **Gummy worm** | Smooth translucent green coil |
+| **S** | ☁️ **Marshmallow rope** | Pale soft-looking bend |
+| **T** | 🥨 **Soft pretzel** | Warm brown turn with natural cartoon curvature |
+| **P** | 🖤 **Licorice twist** | Dark, firm-looking PPII styling |
+
+The food identity comes mainly from **color, material, and the native cartoon geometry** rather than bulky decorative objects.
+
+> **Design principle:** SweetTooth decorates the protein cartoon instead of replacing it.
+
+---
+
+## 🧬 Why SweetTooth?
+
+Conventional secondary-structure coloring is effective, but different states can become visually repetitive in large proteins or trajectory analysis.
+
+SweetTooth introduces a more memorable visual vocabulary while preserving the underlying scientific interpretation:
+
+- modern PyMOL cartoon geometry remains intact
+- DSSP assignments remain the source of truth
+- the original protein object is preserved
+- only SweetTooth-generated objects use the `STF_` prefix
+- `sweettooth_reset` removes only SweetTooth objects
+- no images are generated automatically
+- no structure files are modified
+
+---
+
+## 📦 Installation
+
+### Install from the wheel
 
 ```bash
 python -m pip install --upgrade --force-reinstall \
-  sweettooth_pymol-1.0.0-py3-none-any.whl
+  sweettooth_pymol-1.1.1-py3-none-any.whl
 ```
 
-Then start PyMOL using the packaged launcher:
+Launch PyMOL using the packaged entry point:
 
 ```bash
 sweettooth-pymol
 ```
 
-The launcher avoids incompatible Python/PyMOL wrappers and automatically loads SweetTooth.
-
-`sweettooth-pymol` is a Python console entry point rather than a shell script. It launches the system PyMOL interpreter with only the narrowly scoped compatibility shims required by SweetTooth.
+The launcher starts the system PyMOL interpreter and loads SweetTooth automatically.
 
 ### Optional system installation
 
-SweetTooth can also be installed permanently into a system PyMOL installation:
+SweetTooth can also be installed into a system PyMOL startup directory:
 
 ```bash
 sudo "$(command -v sweettooth-install)" \
@@ -52,98 +89,245 @@ sudo "$(command -v sweettooth-install)" \
   --force
 ```
 
-`--pymol-path` may point either to a PyMOL root directory containing `data/startup` or directly to the PyMOL startup directory.
+`--pymol-path` may point either to:
 
-Administrator privileges may be required for system-wide installations.
+- a PyMOL root containing `data/startup`, or
+- the PyMOL startup directory itself
+
+Administrator privileges may be required for system-wide installation.
 
 ---
 
-## Quick Start
+## 🚀 Quick start
 
-SweetTooth currently uses DSSP secondary-structure assignments.
+SweetTooth uses **DSSP** assignments. Make sure `mkdssp` is available on your `PATH`.
 
-Make sure `mkdssp` is available on your `PATH`.
-
-Then, from the PyMOL command line:
+From the PyMOL command line:
 
 ```text
 sweet_load /absolute/path/to/protein.pdb
 ```
 
-For example:
+Example:
 
 ```text
-sweet_load /home/sray/THESIS_WORK_2026-2027/SWEETOOTH/ALPHAFOLD2HNP.pdb
+sweet_load /home/user/proteins/example.pdb
 ```
 
-SweetTooth generates the required DSSP assignments in a temporary working directory. **The original structure file is never modified.**
+SweetTooth will:
+
+1. run `mkdssp` in a temporary directory
+2. parse the DSSP assignments
+3. map them back to the protein
+4. create the SweetTooth visualization
+5. leave the source structure untouched
 
 ---
 
-## Commands
+## Loading an existing DSSP file
+
+If DSSP assignments have already been calculated:
+
+```text
+load /absolute/path/to/protein.pdb, protein
+sweettooth_load /absolute/path/to/assignments.dssp, dssp
+sweettooth protein
+```
+
+---
+
+## 🎬 Molecular-dynamics trajectories
+
+SweetTooth supports frame-wise DSSP visualization for trajectories.
+
+Generate DSSP with GROMACS:
+
+```bash
+gmx dssp \
+  -s md.gro \
+  -f md.xtc \
+  -o md_dssp.dat \
+  -num md_dssp.xvg \
+  -hmode dssp \
+  -clear
+```
+
+### GRO/XTC route
+
+```text
+sweet_load_md md.gro, md.xtc, md_dssp.dat, MD, 1, 100
+```
+
+### Multi-model PDB route
+
+For PyMOL installations where native XTC handling is unstable, export a protein-only multi-model PDB and use:
+
+```text
+sweet_load_md_pdb md_protein.pdb, md_dssp.dat, MD, 1, 100
+```
+
+SweetTooth updates the DSSP-based coloring and geometry across frames while keeping the underlying trajectory object available.
+
+---
+
+## 🛠 Commands
 
 ```text
 sweet_load path [, object [, auto|dssp]]
-sweettooth_load path, dssp
+
+sweet_load_md gro_path, xtc_path, dssp_dat_path \
+  [, object [, stride [, max_frames]]]
+
+sweet_load_md_pdb pdb_trajectory, dssp_dat_path \
+  [, object [, stride [, max_frames]]]
+
+sweettooth_load path [, dssp]
+
 sweettooth object [, force]
-sweettooth_mode dssp
+
 sweettooth_residue residue
 sweettooth_residue chain, residue
+
 sweettooth_status
 sweettooth_reset
 ```
 
-### Example
+### Useful examples
 
 ```text
-sweet_load /path/to/protein.pdb
 sweettooth_status
+```
+
+Reports the active object, number of mapped residues, DSSP records, and trajectory frames.
+
+```text
 sweettooth_residue A, 215
 ```
 
-To remove the SweetTooth representation:
+Reports the DSSP state assigned to a specific mapped residue.
 
 ```text
 sweettooth_reset
 ```
 
-The underlying protein remains available throughout the session.
+Removes SweetTooth-generated objects and restores the original protein cartoon.
 
 ---
 
-## Design Philosophy
+## 🧪 Scientific interpretation
 
-SweetTooth is a **visualization layer, not a secondary-structure predictor**.
+SweetTooth is a **visualization layer**, not a secondary-structure predictor.
 
-It converts existing structural annotations into a more immediately readable representation while preserving the normal PyMOL environment underneath.
+The structural state shown for each residue comes from DSSP assignments supplied by the user or generated through `mkdssp`.
 
-The goal is to make secondary-structure organization visually intuitive without replacing the molecular structure or interfering with downstream structural analysis.
+The food-inspired representation is intended to improve visual readability and communication. It should not be interpreted as an independent physical or energetic classification.
+
+---
+
+## 🧱 Object safety
+
+SweetTooth creates visualization objects using the prefix:
+
+```text
+STF_
+```
+
+This makes cleanup predictable and prevents accidental deletion of unrelated PyMOL objects.
+
+Running:
+
+```text
+sweettooth_reset
+```
+
+removes only SweetTooth-generated objects and restores the source protein display.
 
 ---
 
 ## Compatibility
 
-SweetTooth remains compatible with **Python 3.8** for older PyMOL builds.
+SweetTooth is designed for:
 
-It also includes a narrowly scoped compatibility shim for older PyMOL lighting plugins that pass floating-point values to modern PyQt slider methods.
+- **Python 3.8+**
+- modern PyMOL builds
+- `mkdssp` available on `PATH`
+- Linux-focused installation workflows
 
-All ordinary PyMOL functionality remains available.
+The package also includes a narrowly scoped compatibility shim for older PyMOL lighting plugins that pass floating-point values into newer PyQt slider APIs.
+
+Normal PyMOL commands remain available while SweetTooth is active.
 
 ---
 
-## Coming Soon
+## 📁 Package structure
 
-A new SweetTooth visualization mode is currently under development.
+```text
+sweettooth_final/
+├── plugin.py        # PyMOL commands and visualization logic
+├── launcher.py      # packaged PyMOL launcher
+├── installer.py     # optional startup-directory installer
+└── runtime/         # narrowly scoped compatibility helpers
+```
 
-**It will extend SweetTooth beyond deterministic secondary-structure assignments and introduce a richer way to explore protein structure inside PyMOL**.
+---
+
+## 🗺 Roadmap
+
+SweetTooth currently focuses on DSSP-driven secondary-structure visualization.
+
+A new interactive structural-visualization feature is under development and will extend the ways structural information can be explored directly inside PyMOL.
 
 **More details coming soon. 🍬**
 
 ---
 
-## Status
+## 🧾 Citation
 
-**SweetTooth Final v1.1.0**
+If SweetTooth contributes to a scientific publication, presentation, or software workflow, please cite the repository and release version used.
 
-Interactive DSSP visualization: **available**  
-Advanced structural-state visualization: **coming soon**
+A formal software citation will be added with the first archived release.
+
+---
+
+## Contributing
+
+Issues, bug reports, compatibility reports, and feature suggestions are welcome.
+
+When reporting a PyMOL compatibility issue, please include:
+
+- operating system
+- PyMOL version
+- Python version
+- installation method
+- the complete PyMOL console error
+- a minimal structure/DSSP example when possible
+
+---
+
+## 📄 License
+
+SweetTooth is released under the **MIT License**.
+
+Copyright © 2026 **Soumyadeep Ray**.
+
+See [`LICENSE`](LICENSE) for details.
+
+---
+
+## Trademark notice
+
+SweetTooth is an independent open-source visualization plugin and is **not affiliated with, sponsored by, or endorsed by Schrödinger, LLC**.
+
+**PyMOL is a trademark of Schrödinger, LLC.** The PyMOL name is used only to identify software compatibility.
+
+No official PyMOL logo, artwork, or other Schrödinger branding is bundled with SweetTooth.
+
+---
+
+<div align="center">
+
+### 🍬 SweetTooth
+
+**Secondary structure, with a little more flavor.**
+
+</div>
