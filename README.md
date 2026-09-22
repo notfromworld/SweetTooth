@@ -29,7 +29,7 @@ Install the Python distribution:
 
 ```bash
 python -m pip install --upgrade --force-reinstall \
-  sweettooth_pymol-1.1.0-py3-none-any.whl
+  sweettooth_pymol-1.0.0-py3-none-any.whl
 ```
 
 Then start PyMOL using the packaged launcher:
