@@ -1,8 +1,6 @@
 <div align="center">
 
 # 🍬 SweetTooth
-### Secondary structure, with a little more flavor
-
 <p align="center">
   <img src="sweettooth.png"
        alt="SweetTooth visualization"
