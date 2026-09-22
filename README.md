@@ -1,6 +1,7 @@
-<div align="center">
-
 # 🍬 SweetTooth
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22900769.svg)](https://doi.org/10.5281/zenodo.22900769)
+
 <p align="center">
   <img src="sweettooth.png"
        alt="SweetTooth visualization"
